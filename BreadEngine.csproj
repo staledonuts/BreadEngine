@@ -10,5 +10,9 @@
   <ItemGroup>
     <None Remove="LayoutReader-Original.cs.txt" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Content Include="Layouts\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

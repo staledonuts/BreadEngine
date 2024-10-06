@@ -4,14 +4,15 @@ using BreadEngine;
 
 class Program 
 {
+    private static readonly string AppDir = AppDomain.CurrentDomain.BaseDirectory;
     static void Main(string[] args)
     {
         FastConsole.Clear();
 
-        LayoutData scene1 = LayoutReader.Read(AppDomain.CurrentDomain.BaseDirectory+"/.Layout");
-        LayoutData scene2 = LayoutReader.Read(AppDomain.CurrentDomain.BaseDirectory+"/.Layout2");
+        LayoutData scene1 = LayoutReader.Read(AppDir+"/Layouts/.Layout");
+        LayoutData scene2 = LayoutReader.Read(AppDir+"/Layouts/.Layout2");
         UIManager.setLayout(scene1);
-
+        
         UIManager.addUniversalKeyBind(ConsoleKey.Escape, () => exit());
 
         Button testButton = (Button) UIManager.GetComponent("test");
