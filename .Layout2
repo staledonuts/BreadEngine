@@ -1,9 +1,22 @@
 :LAYOUT
-0
+0 1 1 1 1 1
+0 1 1 1 1 1
+0 1 1 1 1 1
+0 1 1 1 1 1
+0 1 1 1 1 1
+0 1 1 1 1 1
+0 1 1 1 1 1
 
 :NAV
-0
+0 1
 
 :0
 TITLE(Hello from layout 2)
 TEXT(Loaded layout 2)
+
+:1
+TEXT(After that, you define sections as single characters)
+TEXT(0 0 2 2)
+TEXT(0 0 2 2)
+TEXT(0 0 2 2)
+TEXT(1 1 1 1)

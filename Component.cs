@@ -1,10 +1,10 @@
 using System;
-using System.Text;
-using System.Linq;
 
-namespace BreadEngine {
+namespace BreadEngine 
+{
 
-    public enum ComponentNavigationAction{
+    public enum ComponentNavigationAction
+    {
         Stay,
         NextComponent,
         PreviousComponent,
@@ -12,79 +12,105 @@ namespace BreadEngine {
         PreviousPanel
     }
 
-    public class Component {
+    public class Component 
+    {
         public ConsoleColor foreground = ConsoleColor.White;
         public ConsoleColor background = ConsoleColor.Black;
 
         public string uid = null;
         public bool interactable = false;
 
-        public virtual char[] Draw(int width){
+        public virtual char[] Draw(int width)
+        {
             string str = ToString();
             char[] toReturn = new char[str.Length];
-            for (int i = 0; i < str.Length; i++) {
+            for (int i = 0; i < str.Length; i++) 
+            {
                 toReturn[i] = str[i];
             }
             return toReturn;
         }
 
         public virtual ComponentNavigationAction OnKey(ConsoleKeyInfo keyInfo){
-            if(keyInfo.Key == ConsoleKey.DownArrow || keyInfo.Key == ConsoleKey.Tab){
+            if(keyInfo.Key == ConsoleKey.DownArrow || keyInfo.Key == ConsoleKey.Tab)
+            {
                 return ComponentNavigationAction.NextComponent;
-            }else if(keyInfo.Key == ConsoleKey.UpArrow){
+            }
+            else if(keyInfo.Key == ConsoleKey.UpArrow)
+            {
                 return ComponentNavigationAction.PreviousComponent;
-            } else {
+            }
+            else 
+            {
                 return ComponentNavigationAction.Stay;
             }
         }
 
-        public override string ToString() {
-            if (uid != null) {
+        public override string ToString() 
+        {
+            if (uid != null) 
+            {
                 return $"{GetType().Name.ToUpper()}({uid})";
-            }else{
+            }
+            else
+            {
                 return GetType().Name.ToUpper();
             }
         }
     }
 
-    public class Text : Component { //TODO text wrapping
+    public class Text : Component 
+    { //TODO text wrapping
         public string text;
 
-        public Text(string text) {
+        public Text(string text) 
+        {
             this.text = text;
             foreground = ConsoleColor.White;
             background = ConsoleColor.Black;
             interactable = false;
         }
 
-        public override char[] Draw(int width){
+        public override char[] Draw(int width)
+        {
             char[] toReturn = new char[text.Length];
-            for (int i = 0; i < text.Length; i++) {
+            for (int i = 0; i < text.Length; i++) 
+            {
                 toReturn[i] = text[i];
             }
             return toReturn;
         }
     }
 
-    public class Title : Component {
+    public class Title : Component 
+    {
         public string text;
 
-        public Title(string text) {
+        public Title(string text) 
+        {
             this.text = text;
             foreground = ConsoleColor.White;
             background = ConsoleColor.Black;
             interactable = false;
         }
         
-        public override char[] Draw(int width){
+        public override char[] Draw(int width)
+        {
             char[] toReturn = new char[width];
-            for (int i = 0; i < width; i++) {
-                if(i == 0){
+            for (int i = 0; i < width; i++) 
+            {
+                if(i == 0)
+                {
                     toReturn[i] = '─';
-                }else{
-                    if(i <= text.Length){
+                }
+                else
+                {
+                    if(i <= text.Length)
+                    {
                         toReturn[i] = text[i-1];
-                    } else {
+                    }
+                    else 
+                    {
                         toReturn[i] = '─';
                     }
                 }
@@ -93,19 +119,23 @@ namespace BreadEngine {
         }
     }
 
-    public class Spacer : Component{
+    public class Spacer : Component
+    {
         public string text;
 
         string spacer;
 
-        public Spacer(string spaceWith = " ") {
+        public Spacer(string spaceWith = " ") 
+        {
             spacer = spaceWith;
             interactable = false;
         }
 
-        public override char[] Draw(int width) {
+        public override char[] Draw(int width) 
+        {
             char[] toReturn = new char[width];
-            for (int i = 0; i < width; i++) {
+            for (int i = 0; i < width; i++) 
+            {
                 toReturn[i] = spacer[i%spacer.Length];
             }
             return toReturn;
@@ -113,56 +143,70 @@ namespace BreadEngine {
     }
 
 
-    public class Button : Component {
+    public class Button : Component 
+    {
         public delegate void ButtonCallback();
         private ButtonCallback callback = () => {};
         public string text;
 
-        public Button(string text) {
+        public Button(string text) 
+        {
             this.text = text;
             foreground = ConsoleColor.Green;
             interactable = true;
         }
 
-        public void SetCallback(ButtonCallback callback){
+        public void SetCallback(ButtonCallback callback)
+        {
             this.callback = callback;
         }
 
-        public override char[] Draw(int width){
+        public override char[] Draw(int width)
+        {
             char[] toReturn = new char[text.Length];
-            for (int i = 0; i < text.Length; i++) {
+            for (int i = 0; i < text.Length; i++) 
+            {
                 toReturn[i] = text[i];
             }
             return toReturn;
         }
 
-        public override ComponentNavigationAction OnKey(ConsoleKeyInfo keyInfo){
-            if(keyInfo.Key == ConsoleKey.Enter){
+        public override ComponentNavigationAction OnKey(ConsoleKeyInfo keyInfo)
+        {
+            if(keyInfo.Key == ConsoleKey.Enter)
+            {
                 callback();
                 return ComponentNavigationAction.Stay;
-            } else {
+            } 
+            else 
+            {
                 return base.OnKey(keyInfo);
             }
         }
     }
 
 
-    public class Slider : Component {
+    public class Slider : Component 
+    {
         public string text;
         public int percent;
 
-        public Slider(int percent){
+        public Slider(int percent)
+        {
             text = "LoadBarWithText";
             foreground = ConsoleColor.Cyan;
             interactable = true;
             this.percent = percent;
         }
 
-        public override char[] Draw(int width) {
+        public override char[] Draw(int width) 
+        {
             char[] toReturn = new char[width];
             string percent_str = percent.ToString().PadLeft(3, '0');
-            for (int i = 0; i < width; i++) {
-                switch (i) {
+            for (int i = 0; i < width; i++) 
+            {
+                switch (i) 
+                {
                     case 0:
                         toReturn[i] = '[';
                         break;
@@ -182,11 +226,16 @@ namespace BreadEngine {
                         toReturn[i] = '[';
                         break;
                     default:
-                        if(i == width-1){
+                        if(i == width-1)
+                        {
                             toReturn[i] = ']';
-                        }else if(i-7 < ((width-8) * percent / 100)) { // width-7 100       000000111111111110
+                        }
+                        else if(i-7 < ((width-8) * percent / 100)) 
+                        { // width-7 100       000000111111111110
                             toReturn[i] = '=';
-                        } else {
+                        } 
+                        else 
+                        {
                             toReturn[i] = ' ';
                         }
                         break;
@@ -198,38 +247,53 @@ namespace BreadEngine {
         }
 
         public override ComponentNavigationAction OnKey(ConsoleKeyInfo keyInfo){
-            if(keyInfo.Key == ConsoleKey.LeftArrow) {
+            if(keyInfo.Key == ConsoleKey.LeftArrow) 
+            {
                 percent -= (0 < percent)? 1: 0;
                 return ComponentNavigationAction.Stay;
-            } else if(keyInfo.Key == ConsoleKey.RightArrow) {
+            } 
+            else if(keyInfo.Key == ConsoleKey.RightArrow) 
+            {
                 percent += (percent < 100)? 1: 0;
                 return ComponentNavigationAction.Stay;
-            } else{
+            } 
+            else
+            {
                 return base.OnKey(keyInfo);
             }
         }
     }
 
-    public class LoadBar : Component {
+    public class LoadBar : Component 
+    {
         public int percent;
 
-        public LoadBar(int percent){
+        public LoadBar(int percent)
+        {
             foreground = ConsoleColor.Blue;
             interactable = false;
             this.percent = percent;
         }
 
-        public override char[] Draw(int width) {
+        public override char[] Draw(int width) 
+        {
             char[] toReturn = new char[width];
-            for (int i = 0; i < width; i++) {
-                if(i == 0) {
+            for (int i = 0; i < width; i++) 
+            {
+                if(i == 0) 
+                {
                     toReturn[i] = '[';
-                } else if(i == width-1){
+                } 
+                else if(i == width-1)
+                {
                     toReturn[i] = ']';
                 } else {
-                    if(i < (width * percent / 100)) {
+                    if(i < (width * percent / 100)) 
+                    {
                         toReturn[i] = '=';
-                    } else {
+                    } 
+                    else 
+                    {
                         toReturn[i] = ' ';
                     }
                 }
@@ -237,34 +301,45 @@ namespace BreadEngine {
             return toReturn;
         }
     }
-public class TextBox : Component {
+public class TextBox : Component 
+{
         
         public string text = "";
 
-        public TextBox() {
+        public TextBox() 
+        {
             interactable = true;
         }
 
-        public TextBox(string text) {
+        public TextBox(string text) 
+        {
             interactable = true;
             this.text = text;
         }
 
-        public override char[] Draw(int width){
+        public override char[] Draw(int width)
+        {
             char[] toReturn = new char[text.Length];
-            for (int i = 0; i < text.Length; i++) {
+            for (int i = 0; i < text.Length; i++) 
+            {
                 toReturn[i] = text[i];
             }
             return toReturn;
         }
 
         public override ComponentNavigationAction OnKey(ConsoleKeyInfo keyInfo){
-            if(keyInfo.Key == ConsoleKey.DownArrow || keyInfo.Key == ConsoleKey.Tab){
+            if(keyInfo.Key == ConsoleKey.DownArrow || keyInfo.Key == ConsoleKey.Tab)
+            {
                 return ComponentNavigationAction.NextComponent;
-            }else if(keyInfo.Key == ConsoleKey.UpArrow){
+            }
+            else if(keyInfo.Key == ConsoleKey.UpArrow)
+            {
                 return ComponentNavigationAction.PreviousComponent;
-            } else {
-                switch (keyInfo.Key) {
+            } 
+            else 
+            {
+                switch (keyInfo.Key) 
+                {
                     case ConsoleKey.Enter:
                     case ConsoleKey.End:
                     case ConsoleKey.Home:
@@ -274,7 +349,8 @@ public class TextBox : Component {
                     case ConsoleKey.DownArrow:
                         break;
                     case ConsoleKey.Backspace:
-                        if(text.Length != 0){
+                        if(text.Length != 0)
+                        {
                             text = text.Substring(0, text.Length-1);
                         }
                         break;
