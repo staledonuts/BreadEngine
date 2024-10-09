@@ -55,11 +55,17 @@ public class FastConsole
 
     public static int Width
     {
-        get{ return Console.WindowWidth; }
+        get
+        { 
+            return Console.BufferWidth;
+        }
     }
     public static int Height
     {
-        get{ return Console.WindowHeight; }
+        get
+        {
+            return Console.BufferHeight;
+        }
     }
 
     static FastConsole()
@@ -115,7 +121,7 @@ public class FastConsole
         }
 
         
-        
+           
         // offset += s.Length;
         // var rgb = new byte[s.Length << 1];
         // Encoding.Unicode.GetBytes(s, 0, s.Length, rgb, 0);

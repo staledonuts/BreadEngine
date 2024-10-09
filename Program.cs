@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using BreadEngine;
 
 class Program 
 {
     private static readonly string AppDir = AppDomain.CurrentDomain.BaseDirectory;
-    static void Main(string[] args)
+    private static Dictionary<int, LayoutData> _scenes = new();
+    private static void Main(string[] args)
     {
         FastConsole.Clear();
-
-        LayoutData scene1 = LayoutReader.Read(AppDir+"/Layouts/.Layout");
-        LayoutData scene2 = LayoutReader.Read(AppDir+"/Layouts/.Layout2");
-        UIManager.setLayout(scene1);
+        LoadLayouts();
+        SetLayoutData(0);
         
         UIManager.addUniversalKeyBind(ConsoleKey.Escape, () => exit());
 
@@ -19,7 +19,7 @@ class Program
         testButton.SetCallback(() => 
         {
             testButton.text = "Loading...";
-            UIManager.setLayout(scene1);
+            SetLayoutData(0);
         });
 
         Console.CancelKeyPress += delegate 
@@ -33,8 +33,30 @@ class Program
         //Called when we exit the ui loop
         exit();
     }
-
-    static bool exit() 
+    static void LoadLayouts()
+    {
+        int currentIndex = 0;
+        foreach(string s in Directory.GetFiles(AppDir+"/Layouts/"))
+        {
+            if(Path.GetExtension(s) == ".lyt")
+            {
+                _scenes.Add(currentIndex, LayoutReader.Read(s));
+                currentIndex++;
+            }
+        }
+    }
+    private static void SetLayoutData(int data)
+    {
+        if(_scenes.TryGetValue(data, out LayoutData lyt))
+        {
+            UIManager.setLayout(lyt);
+        }
+        else
+        {
+            throw new();
+        }
+    }
+    private static bool exit() 
     {
         Console.ResetColor();
         Console.Clear();
