@@ -6,7 +6,7 @@ using BreadEngine;
 class Program 
 {
     private static readonly string AppDir = AppDomain.CurrentDomain.BaseDirectory;
-    private static Dictionary<int, LayoutData> _scenes = new();
+    private static Dictionary<int, LayoutData> _scenes = [];
     private static void Main(string[] args)
     {
         FastConsole.Clear();
@@ -33,7 +33,7 @@ class Program
         //Called when we exit the ui loop
         exit();
     }
-    static void LoadLayouts()
+    private static void LoadLayouts()
     {
         int currentIndex = 0;
         foreach(string s in Directory.GetFiles(AppDir+"/Layouts/"))
@@ -53,7 +53,7 @@ class Program
         }
         else
         {
-            throw new();
+            throw new LayoutMissingException(data.ToString());
         }
     }
     private static bool exit() 
